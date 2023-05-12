@@ -26,7 +26,13 @@ class DetailScreen extends StatelessWidget {
         children: [
           const SizedBox(height: 50),
           Center(
-            child: WebtoonImage(thumb: thumb),
+            child: Hero(
+              tag: id,
+              child: WebtoonImage(
+                thumb: thumb,
+                large: true,
+              ),
+            ),
           ),
         ],
       ),
