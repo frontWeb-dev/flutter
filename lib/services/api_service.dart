@@ -1,8 +1,8 @@
 import 'dart:convert';
-import 'package:coin_flt/models/webtoon_detail_model.dart';
 import 'package:http/http.dart' as http;
-import 'package:coin_flt/models/webtoon_model.dart';
-import 'package:coin_flt/models/webtoon_episode_model.dart';
+import '../models/webtoon_detail_model.dart';
+import '../models/webtoon_model.dart';
+import '../models/webtoon_episode_model.dart';
 
 class ApiService {
   static const String baseUrl =

@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:coin_flt/screens/home_screen.dart';
+import 'screens/home_screen.dart';
 import 'package:flutter/material.dart';
 
 class MyHttpOverrides extends HttpOverrides {

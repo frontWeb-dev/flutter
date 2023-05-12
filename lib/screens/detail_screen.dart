@@ -1,10 +1,12 @@
-import 'package:coin_flt/models/webtoon_detail_model.dart';
-import 'package:coin_flt/models/webtoon_episode_model.dart';
-import 'package:coin_flt/services/api_service.dart';
-import 'package:coin_flt/widgets/widget_bigletter.dart';
-import 'package:coin_flt/widgets/widget_episode.dart';
-import 'package:coin_flt/widgets/widget_image.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import '../models/webtoon_detail_model.dart';
+import '../models/webtoon_episode_model.dart';
+import '../services/api_service.dart';
+import '../widgets/widget_bigletter.dart';
+import '../widgets/widget_episode.dart';
+import '../widgets/widget_image.dart';
 
 class DetailScreen extends StatefulWidget {
   final String title, thumb, id;
@@ -19,12 +21,46 @@ class DetailScreen extends StatefulWidget {
 class _DetailScreenState extends State<DetailScreen> {
   late Future<WebtoonDetailModel> webtoon;
   late Future<List<WebtoonEpisodeModel>> episodes;
+  late SharedPreferences prefs;
+  bool isLiked = false;
+
+  Future initPrefs() async {
+    prefs = await SharedPreferences.getInstance();
+
+    final likedToons = prefs.getStringList('likedToons');
+    if (likedToons != null) {
+      if (likedToons.contains(widget.id) == true) {
+        isLiked = true;
+        setState(() {});
+      }
+    } else {
+      await prefs.setStringList("likedToons", []);
+    }
+  }
+
+  onHeartTap() async {
+    final likedToons = prefs.getStringList('likedToons');
+
+    if (likedToons != null) {
+      if (isLiked) {
+        likedToons.remove(widget.id);
+      } else {
+        likedToons.add(widget.id);
+      }
+
+      await prefs.setStringList("likedToons", likedToons);
+      setState(() {
+        isLiked = !isLiked;
+      });
+    } else {}
+  }
 
   @override
   void initState() {
     super.initState();
     webtoon = ApiService.getToonById(widget.id);
     episodes = ApiService.getLastestEpisodesByid(widget.id);
+    initPrefs();
   }
 
   @override
@@ -36,6 +72,15 @@ class _DetailScreenState extends State<DetailScreen> {
         foregroundColor: Colors.black,
         backgroundColor: Colors.white,
         centerTitle: true,
+        actions: [
+          IconButton(
+            onPressed: onHeartTap,
+            icon: Icon(isLiked
+                ? Icons.favorite_rounded
+                : Icons.favorite_border_rounded),
+            color: isLiked ? Colors.red : Colors.black,
+          ),
+        ],
         title: Text(
           widget.title,
           style: const TextStyle(

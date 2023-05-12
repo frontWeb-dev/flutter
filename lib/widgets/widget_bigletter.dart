@@ -22,7 +22,10 @@ class Bigletter extends StatelessWidget {
                 ),
                 TextSpan(
                   text: string.substring(1),
-                  style: const TextStyle(fontSize: 14, color: Colors.black),
+                  style: const TextStyle(
+                      fontSize: 14,
+                      color: Colors.black,
+                      fontWeight: FontWeight.w400),
                 )
               ],
             ),

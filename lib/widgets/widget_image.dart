@@ -19,7 +19,7 @@ class WebtoonImage extends StatelessWidget {
         )
       ]),
       width: large ? 250 : 200,
-      child: Image.network(thumb),
+      child: Image(image: NetworkImage(thumb)),
     );
   }
 }

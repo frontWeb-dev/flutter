@@ -1,6 +1,6 @@
-import 'package:coin_flt/models/webtoon_model.dart';
-import 'package:coin_flt/services/api_service.dart';
-import 'package:coin_flt/widgets/widget_webtoon.dart';
+import '../models/webtoon_model.dart';
+import '../services/api_service.dart';
+import '../widgets/widget_webtoon.dart';
 import 'package:flutter/material.dart';
 
 class HomeScreen extends StatelessWidget {

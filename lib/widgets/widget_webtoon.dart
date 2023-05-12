@@ -1,5 +1,5 @@
-import 'package:coin_flt/screens/detail_screen.dart';
-import 'package:coin_flt/widgets/widget_image.dart';
+import '../screens/detail_screen.dart';
+import 'widget_image.dart';
 import 'package:flutter/material.dart';
 
 class Webtoon extends StatelessWidget {
