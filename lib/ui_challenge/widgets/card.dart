@@ -4,6 +4,7 @@ class Cards extends StatelessWidget {
   final String text; // euro
   final String price;
   final String symbol;
+  final IconData icon;
   final Color bgColor;
   final Color textColor;
 
@@ -12,6 +13,7 @@ class Cards extends StatelessWidget {
     required this.text,
     required this.price,
     required this.symbol,
+    required this.icon,
     required this.bgColor,
     required this.textColor,
   });
@@ -19,6 +21,7 @@ class Cards extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      clipBehavior: Clip.hardEdge, // overflow : hidden
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),
         color: bgColor,
@@ -26,6 +29,7 @@ class Cards extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.all(20),
         child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -61,6 +65,17 @@ class Cards extends StatelessWidget {
                   ],
                 )
               ],
+            ),
+            Transform.scale(
+              scale: 2,
+              child: Transform.translate(
+                offset: const Offset(-8, 12),
+                child: Icon(
+                  icon,
+                  color: textColor,
+                  size: 98,
+                ),
+              ),
             ),
           ],
         ),

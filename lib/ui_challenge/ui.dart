@@ -104,6 +104,7 @@ class UI extends StatelessWidget {
                 symbol: 'EUR',
                 bgColor: Color(0xFF1F2123),
                 textColor: Colors.white,
+                icon: Icons.euro,
               ),
             ],
           ),
