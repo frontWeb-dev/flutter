@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import './widgets/button.dart';
+import './widgets/card.dart';
 
 class UI extends StatelessWidget {
   const UI({super.key});
@@ -12,7 +13,7 @@ class UI extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const SizedBox(
-            height: 80,
+            height: 60,
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
@@ -40,7 +41,7 @@ class UI extends StatelessWidget {
               )
             ],
           ),
-          const SizedBox(height: 120),
+          const SizedBox(height: 100),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -53,7 +54,7 @@ class UI extends StatelessWidget {
               ),
               const SizedBox(height: 5),
               const Text(
-                '\$5 194 382',
+                '\$5,194,382',
                 style: TextStyle(
                     color: Colors.white,
                     fontSize: 44,
@@ -74,7 +75,36 @@ class UI extends StatelessWidget {
                     textColor: Colors.white,
                   ),
                 ],
-              )
+              ),
+              const SizedBox(height: 100),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  const Text(
+                    'Wallets',
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 36,
+                        fontWeight: FontWeight.w600),
+                  ),
+                  Text(
+                    'View All',
+                    style: TextStyle(
+                      color: Colors.white.withOpacity(0.8),
+                      fontSize: 18,
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 20),
+              const Cards(
+                text: 'Euro',
+                price: '6,428',
+                symbol: 'EUR',
+                bgColor: Color(0xFF1F2123),
+                textColor: Colors.white,
+              ),
             ],
           ),
         ],
