@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'dart:async';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -8,6 +9,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  late Timer timer;
   static const times = {
     '15': 1,
     '20': 1200,
@@ -15,6 +17,32 @@ class _HomeScreenState extends State<HomeScreen> {
     '30': 1800,
     '35': 2100
   };
+
+  String setmin = '25';
+  int totalSecond = 1500; // 25min
+
+  void onTick(Timer timer) {
+    setState(() {
+      totalSecond = totalSecond - 1;
+    });
+  }
+
+  void onStartPressed() {
+    timer = Timer.periodic(
+      const Duration(seconds: 1),
+      onTick,
+    );
+  }
+
+  String formatMin(int seconds) {
+    var duration = Duration(seconds: seconds); // 0:00:00.00000
+    return (duration.toString().split(".").first.substring(2, 4)); // 00:00
+  }
+
+  String formatSec(int seconds) {
+    var duration = Duration(seconds: seconds); // 0:00:00.00000
+    return (duration.toString().split(".").first.substring(5)); // 00:00
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -49,7 +77,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           decoration: const BoxDecoration(color: Colors.white),
                           padding: const EdgeInsets.all(20),
                           child: Text(
-                            '25',
+                            formatMin(totalSecond),
                             style: TextStyle(
                               color: Theme.of(context).colorScheme.background,
                               fontSize: 48,
@@ -70,7 +98,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           decoration: const BoxDecoration(color: Colors.white),
                           padding: const EdgeInsets.all(20),
                           child: Text(
-                            '00',
+                            formatSec(totalSecond),
                             style: TextStyle(
                               color: Theme.of(context).colorScheme.background,
                               fontSize: 48,
@@ -120,7 +148,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   iconSize: 120,
                   icon: const Icon(Icons.play_circle_outline),
                   color: Colors.white,
-                  onPressed: () {},
+                  onPressed: onStartPressed,
                 ),
               ),
             ),
