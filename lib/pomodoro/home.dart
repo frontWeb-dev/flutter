@@ -9,22 +9,58 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  late Timer timer;
   static const times = {
-    '15': 1,
+    '15': 900,
     '20': 1200,
     '25': 1500,
     '30': 1800,
     '35': 2100
   };
 
+  late Timer timer;
   String setmin = '25';
   int totalSecond = 1500; // 25min
+  int rest = 300; // 5min
+
+  int totalPomodoros = 0;
+  int totalRound = 0;
+
+  bool isRunning = false;
+  bool isRest = false;
 
   void onTick(Timer timer) {
-    setState(() {
-      totalSecond = totalSecond - 1;
-    });
+    if (totalSecond == 0) {
+      if (!isRest) {
+        setState(() {
+          totalRound = totalRound + 1;
+          isRunning = false;
+          totalSecond = times[setmin] as int;
+        });
+      } else {
+        setState(() {
+          isRunning = false;
+          isRest = false;
+          totalSecond = times[setmin] as int;
+        });
+      }
+
+      if (totalRound == 4) {
+        totalRound = 0;
+        totalPomodoros = totalPomodoros + 1;
+
+        // reset
+        setState(() {
+          isRest = true;
+          totalSecond = rest;
+        });
+      }
+
+      timer.cancel();
+    } else {
+      setState(() {
+        totalSecond = totalSecond - 1;
+      });
+    }
   }
 
   void onStartPressed() {
@@ -32,6 +68,32 @@ class _HomeScreenState extends State<HomeScreen> {
       const Duration(seconds: 1),
       onTick,
     );
+
+    setState(() {
+      isRunning = true;
+    });
+  }
+
+  void onPausePressed() {
+    timer.cancel(); // 일시정지
+    setState(() {
+      isRunning = false;
+    });
+  }
+
+  void onStopPressed() {
+    timer.cancel();
+    totalSecond = times[setmin] as int;
+    setState(() {
+      isRunning = false;
+    });
+  }
+
+  void selectMin(e) {
+    setState(() {
+      setmin = e;
+      totalSecond = times[setmin] as int;
+    });
   }
 
   String formatMin(int seconds) {
@@ -57,10 +119,11 @@ class _HomeScreenState extends State<HomeScreen> {
             Text(
               'Pomodoros',
               style: TextStyle(
-                  color: Theme.of(context).cardColor,
-                  fontSize: 20,
-                  letterSpacing: -0.5,
-                  fontWeight: FontWeight.w600),
+                color: Theme.of(context).cardColor,
+                fontSize: 20,
+                letterSpacing: 2,
+                fontWeight: FontWeight.w600,
+              ),
             ),
             Flexible(
               flex: 2,
@@ -70,6 +133,15 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
+                    Text(
+                      isRest ? 'Take a Rest !' : "",
+                      style: TextStyle(
+                        color: Theme.of(context).cardColor,
+                        fontSize: 20,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    const SizedBox(height: 20),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -117,8 +189,11 @@ class _HomeScreenState extends State<HomeScreen> {
                           return Padding(
                             padding: const EdgeInsets.all(5),
                             child: TextButton(
-                              onPressed: () {},
+                              onPressed: () => selectMin(time.key),
                               style: TextButton.styleFrom(
+                                backgroundColor: setmin == time.key
+                                    ? Colors.white
+                                    : Theme.of(context).colorScheme.background,
                                 side: BorderSide(
                                     width: 2.0,
                                     color: Theme.of(context).cardColor),
@@ -128,7 +203,9 @@ class _HomeScreenState extends State<HomeScreen> {
                               child: Text(
                                 time.key,
                                 style: TextStyle(
-                                  color: Theme.of(context).cardColor,
+                                  color: setmin == time.key
+                                      ? Theme.of(context).colorScheme.background
+                                      : Theme.of(context).cardColor,
                                   fontSize: 20,
                                 ),
                               ),
@@ -145,10 +222,12 @@ class _HomeScreenState extends State<HomeScreen> {
               flex: 1,
               child: Center(
                 child: IconButton(
-                  iconSize: 120,
-                  icon: const Icon(Icons.play_circle_outline),
+                  iconSize: 100,
+                  icon: Icon(
+                    isRunning ? Icons.pause_circle : Icons.play_circle,
+                  ),
                   color: Colors.white,
-                  onPressed: onStartPressed,
+                  onPressed: isRunning ? onPausePressed : onStartPressed,
                 ),
               ),
             ),
@@ -164,7 +243,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
-                            '0 / 4',
+                            "$totalRound / 4",
                             style: TextStyle(
                               color: Colors.white.withOpacity(0.7),
                               fontSize: 20,
@@ -186,7 +265,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
-                            '0 / 12',
+                            "$totalPomodoros / 12",
                             style: TextStyle(
                               color: Colors.white.withOpacity(0.7),
                               fontSize: 20,
